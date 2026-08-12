@@ -3,7 +3,7 @@ import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 const routes = [
-  ["/", "Your first 10 minutes, planned"],
+  ["/", "Walk first. Grow. Test one wall"],
   ["/beginner-guide", "Plan your first session"],
   ["/progression", "Make each loop answer one question"],
   ["/mistakes", "Find the stalled loop"],
@@ -26,7 +26,7 @@ test("home page is beginner-first and uses production metadata", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Your first 10 minutes, planned/);
+  assert.match(html, /Walk first\. Grow\. Test one wall/);
   assert.match(html, /Start the beginner tutorial/);
   assert.match(html, /href="\/beginner-guide"/);
   assert.match(html, /https:\/\/plus1growperstep\.wiki\/og\.png/);
@@ -34,6 +34,8 @@ test("home page is beginner-first and uses production metadata", async () => {
   assert.match(html, /630/);
   assert.match(html, /application\/ld\+json/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/);
+  assert.match(html, /mobile-start-bar/);
+  assert.match(html, /RIGHT NOW/);
 });
 
 test("every guide route renders one h1, a canonical, and internal next steps", async () => {
@@ -74,4 +76,23 @@ test("source repository excludes the starter and keeps required assets", async (
   await access(new URL("../public/official-game-thumbnail.png", import.meta.url));
   const packageJson = await readFile(new URL("../package.json", import.meta.url), "utf8");
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
+});
+
+test("every internal guide link and section anchor has a rendered target", async () => {
+  const rendered = new Map();
+  for (const [path] of routes) rendered.set(path, await (await render(path)).text());
+
+  for (const [sourcePath, html] of rendered) {
+    for (const match of html.matchAll(/href="(\/[^"]*)"/g)) {
+      const [targetPath, fragment] = match[1].split("#");
+      if (targetPath.startsWith("/_next/") || targetPath.startsWith("/_vinext/")) continue;
+      if (/\.(?:png|svg|ico|css|js)$/i.test(targetPath)) continue;
+      const normalizedPath = targetPath || sourcePath;
+      assert.ok(rendered.has(normalizedPath), `${sourcePath} links to unknown route ${match[1]}`);
+      if (fragment) {
+        const targetHtml = rendered.get(normalizedPath);
+        assert.match(targetHtml, new RegExp(`id=["']${fragment}["']`), `${sourcePath} links to missing anchor ${match[1]}`);
+      }
+    }
+  }
 });

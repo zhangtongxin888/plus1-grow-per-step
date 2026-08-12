@@ -12,7 +12,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
   description:
-    "A fact-checked +1 Grow Per Step beginner guide covering the first run, growth loop, upgrades, walls, crystals, rebirths, offline growth, and mistakes.",
+    "Start +1 Grow Per Step with a fact-checked first-run tutorial, then learn the growth loop, wall checks, upgrades, crystals, rebirths, offline growth, and common mistakes.",
+  keywords: ["+1 Grow Per Step", "+1 Grow Per Step guide", "+1 Grow Per Step wiki", "Roblox beginner guide"],
+  category: "games",
+  robots: { index: true, follow: true },
   applicationName: SITE_NAME,
   alternates: { canonical: "/" },
   openGraph: {

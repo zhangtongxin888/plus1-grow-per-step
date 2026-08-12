@@ -31,5 +31,6 @@ export function createPageMetadata(title: string, description: string, path: str
       images: [{ url: "/og.png", width: 1200, height: 630, alt: "+1 Grow Per Step beginner mission" }],
     },
     twitter: { card: "summary_large_image", title, description, images: ["/og.png"] },
+    robots: { index: true, follow: true },
   };
 }

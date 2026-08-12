@@ -24,6 +24,16 @@ export default function Progression() {
             <a href="#offline">Offline return</a>
           </nav>
           <div className="article-body progression-body">
+            <section className="progression-compass" aria-labelledby="compass-title">
+              <p className="eyebrow dark">PROGRESSION COMPASS</p>
+              <h2 id="compass-title">Name the bottleneck before you act.</h2>
+              <div className="compass-grid">
+                <a href="#early-loop"><small>NO BASELINE</small><strong>Repeat one walking loop</strong><span>Learn what movement alone changes →</span></a>
+                <a href="#upgrades"><small>SLOW LOOP</small><strong>Inspect one improvement</strong><span>Compare the same route again →</span></a>
+                <a href="#wall-push"><small>FAILED WALL</small><strong>Change state before retry</strong><span>Make the next test useful →</span></a>
+                <a href="#rebirth"><small>LONG PLATEAU</small><strong>Read the shown rebirth benefit</strong><span>Decide with current information →</span></a>
+              </div>
+            </section>
             <section className="progression-stage" id="early-loop">
               <div className="stage-label">STAGE 01</div>
               <FactBadge type="strategy" />

@@ -81,11 +81,11 @@ export default function Home() {
       <section className="hero">
         <div className="shell hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow">FIRST RUN MISSION · BEGIN HERE</p>
-            <h1>Your first 10 minutes, planned.</h1>
+            <p className="eyebrow">FIRST RUN MISSION · START WITH MOVEMENT</p>
+            <h1>Walk first. Grow. Test one wall.</h1>
             <p className="hero-lede">
-              Learn the growth loop without guessed numbers: walk, check one wall,
-              improve the bottleneck, then decide what should happen next.
+              Your next move is simple: walk one short loop, watch your size change,
+              then use the nearest wall as a checkpoint. The tutorial shows what to do after that.
             </p>
             <a className="button primary hero-primary" href="/beginner-guide">
               Start the beginner tutorial <span aria-hidden="true">→</span>
@@ -96,11 +96,25 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="mission-board" aria-label="First run mission checklist">
+          <aside className="mission-board" aria-label="First run mission preview">
             <div className="mission-board-head">
-              <span>MISSION 001</span>
-              <b>STARTER ROUTE</b>
-              <i>4 STEPS</i>
+              <span>FIELD CARD 001</span>
+              <b>FIRST WALL CHECK</b>
+              <i>BEGINNER</i>
+            </div>
+            <div className="checkpoint-visual">
+              <Image
+                src="/official-game-thumbnail.png"
+                alt="Official +1 Grow Per Step artwork showing a small player facing a gigantic wall"
+                width={512}
+                height={512}
+                priority
+                unoptimized
+              />
+              <div className="growth-ruler" aria-hidden="true">
+                <span>GROWTH</span><i /><i /><i /><i /><i /><b>NEXT WALL</b>
+              </div>
+              <p><span>CHECKPOINT</span><strong>Change your size before every retry.</strong></p>
             </div>
             <ol>
               {missionSteps.map(([number, title, copy]) => (
@@ -110,7 +124,7 @@ export default function Home() {
                 </li>
               ))}
             </ol>
-            <a href="#first-run">Preview the route below <span aria-hidden="true">↓</span></a>
+            <a href="#first-run">Preview all four actions <span aria-hidden="true">↓</span></a>
           </aside>
         </div>
       </section>
@@ -120,6 +134,17 @@ export default function Home() {
           <strong>OFFICIAL DESCRIPTION CONFIRMS</strong>
           <span>Walking growth</span><span>Walls</span><span>Upgrades</span>
           <span>Crystals</span><span>Rebirth</span><span>Offline growth</span>
+        </div>
+      </section>
+
+      <section className="next-move" aria-label="New player next move">
+        <div className="shell next-move-grid">
+          <div><span>RIGHT NOW</span><strong>Walk a short route</strong><small>Notice the size change.</small></div>
+          <i aria-hidden="true">→</i>
+          <div><span>THEN</span><strong>Try one wall once</strong><small>Use it as a checkpoint.</small></div>
+          <i aria-hidden="true">→</i>
+          <div><span>IF BLOCKED</span><strong>Grow before retrying</strong><small>Change something first.</small></div>
+          <a href="/beginner-guide">SEE THE FULL ROUTE →</a>
         </div>
       </section>
 
@@ -181,9 +206,9 @@ export default function Home() {
         <div className="shell roadmap-grid">
           <div><p className="eyebrow dark">ADVANCED ROUTE</p><h2>Three stages, one useful question.</h2><p>Ask: “What makes my next checkpoint arrive sooner?”</p></div>
           <ol>
-            <li><span>STAGE 01</span><strong>First lap</strong><p>Learn what walking alone accomplishes.</p></li>
-            <li><span>STAGE 02</span><strong>Wall push</strong><p>Grow, test once, improve, then recheck.</p></li>
-            <li><span>STAGE 03</span><strong>Rebirth cycle</strong><p>Use it only after reading its current benefit and changes.</p></li>
+            <li><span>STAGE 01</span><strong>First lap</strong><p>Learn what walking alone accomplishes.</p><a href="/beginner-guide#baseline" aria-label="Read the first lap guide">→</a></li>
+            <li><span>STAGE 02</span><strong>Wall push</strong><p>Grow, test once, improve, then recheck.</p><a href="/progression#wall-push" aria-label="Read the wall push guide">→</a></li>
+            <li><span>STAGE 03</span><strong>Rebirth cycle</strong><p>Use it only after reading its current benefit and changes.</p><a href="/progression#rebirth" aria-label="Read the rebirth guide">→</a></li>
           </ol>
         </div>
       </section>

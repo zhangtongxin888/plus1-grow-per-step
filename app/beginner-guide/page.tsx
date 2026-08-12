@@ -32,6 +32,16 @@ export default function BeginnerGuide() {
             <a href="#offline">Return from offline</a>
           </nav>
           <div className="article-body">
+            <section className="route-brief" aria-labelledby="route-brief-title">
+              <p className="eyebrow dark">BEFORE YOU MOVE</p>
+              <h2 id="route-brief-title">Pick one wall as your measuring stick.</h2>
+              <p>Do not try to clear the whole game in one session. Your first useful goal is to learn how a short walk changes your character, then compare that change against one nearby wall.</p>
+              <div className="route-brief-grid">
+                <div><small>OBSERVE</small><strong>What does one normal walking loop change?</strong></div>
+                <div><small>TEST</small><strong>Does the same wall respond differently?</strong></div>
+                <div><small>DECIDE</small><strong>Walk, improve, explore, or inspect rebirth?</strong></div>
+              </div>
+            </section>
             <aside className="guide-fact-intro">
               <FactBadge type="confirmed" />
               <p>The official description confirms walking growth, upgrades and multipliers, walls, new areas, crystals, rebirth, and offline growth. The route below is practical strategy built from those systems.</p>
@@ -54,6 +64,12 @@ export default function BeginnerGuide() {
             </GuideStep>
 
             <GuideStep id="offline" number="06" title="Inspect offline growth before acting" action="When you return, first inspect the result shown by the game, then test your current checkpoint before changing another system." why="Offline growth is confirmed, but no public rate, cap, or claim method is documented." success="Your first decision uses the result actually shown on return, not an assumed formula." />
+
+            <section className="mission-complete" aria-labelledby="mission-complete-title">
+              <span aria-hidden="true">✓</span>
+              <div><p className="eyebrow dark">MISSION COMPLETE</p><h2 id="mission-complete-title">You are ready when you can explain your next move.</h2><p>A successful first session is not a specific size. It is knowing whether walking, an in-game upgrade, a newly available area, or the displayed rebirth benefit is the most useful thing to inspect next.</p></div>
+              <a className="button ink" href="/progression">Continue to progression →</a>
+            </section>
 
             <GuideNextRail links={[
               { eyebrow: "REVIEW", title: "Home mission board", href: "/" },

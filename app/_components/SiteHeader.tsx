@@ -26,6 +26,10 @@ export function SiteHeader() {
           </details>
         </div>
       </header>
+      <a className="mobile-start-bar" href="/beginner-guide">
+        <span><b>NEW PLAYER?</b> Follow the first-run route</span>
+        <strong>START →</strong>
+      </a>
     </>
   );
 }
