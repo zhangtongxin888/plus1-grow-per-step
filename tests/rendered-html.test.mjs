@@ -70,6 +70,43 @@ test("robots and sitemap expose the canonical six-route site", async () => {
   }
 });
 
+test("CSP allows banner and native schemes without an Adsterra host allowlist", async () => {
+  const vercel = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
+  const cspHeader = vercel.headers
+    .flatMap((group) => group.headers)
+    .find((header) => header.key === "Content-Security-Policy");
+  assert.ok(cspHeader?.value, "Content-Security-Policy value missing");
+  const policy = Object.fromEntries(
+    cspHeader.value.split(";").map((directive) => {
+      const [name, ...sources] = directive.trim().split(/\s+/);
+      return [name, sources];
+    }),
+  );
+
+  for (const source of ["https:", "blob:", "data:"]) {
+    assert.ok(policy["script-src"].includes(source), `script-src missing ${source}`);
+    assert.ok(policy["frame-src"].includes(source), `frame-src missing ${source}`);
+    assert.ok(policy["worker-src"].includes(source), `worker-src missing ${source}`);
+  }
+  for (const source of ["https:", "wss:", "blob:"]) {
+    assert.ok(policy["connect-src"].includes(source), `connect-src missing ${source}`);
+  }
+  for (const source of ["https:", "blob:", "data:"]) {
+    assert.ok(policy["style-src"].includes(source), `style-src missing ${source}`);
+    assert.ok(policy["img-src"].includes(source), `img-src missing ${source}`);
+    assert.ok(policy["font-src"].includes(source), `font-src missing ${source}`);
+    assert.ok(policy["media-src"].includes(source), `media-src missing ${source}`);
+  }
+  assert.equal(policy["object-src"].join(" "), "'none'");
+  assert.doesNotMatch(cspHeader.value, /highperformanceformat|effectivecpmnetwork|adsterra\.com|profitablecreativeformat|bnserving/i);
+
+  const adConfig = await readFile(new URL("../lib/adsterra.generated.ts", import.meta.url), "utf8");
+  assert.match(adConfig, /adsterraEnablePopunder:\s*false/);
+  assert.match(adConfig, /adsterraEnableSocialBar:\s*false/);
+  assert.match(adConfig, /adsterraBanner300x250ScriptUrl:/);
+  assert.match(adConfig, /adsterraNative1ScriptUrl:/);
+});
+
 test("source repository excludes the starter and keeps required assets", async () => {
   await assert.rejects(access(new URL("../app/_sites-preview/SkeletonPreview.tsx", import.meta.url)));
   await access(new URL("../public/og.png", import.meta.url));
