@@ -103,8 +103,43 @@ test("CSP allows banner and native schemes without an Adsterra host allowlist", 
   const adConfig = await readFile(new URL("../lib/adsterra.generated.ts", import.meta.url), "utf8");
   assert.match(adConfig, /adsterraEnablePopunder:\s*false/);
   assert.match(adConfig, /adsterraEnableSocialBar:\s*false/);
+  assert.match(adConfig, /adsterraEnableStickyRail:\s*false/);
   assert.match(adConfig, /adsterraBanner300x250ScriptUrl:/);
+  assert.match(adConfig, /adsterraBanner728x90ScriptUrl:/);
   assert.match(adConfig, /adsterraNative1ScriptUrl:/);
+});
+
+function classCount(html, className) {
+  return (html.match(new RegExp(`class="[^"]*\\b${className}\\b[^"]*"`, "g")) ?? []).length;
+}
+
+test("content pages show one early banner plus native and rectangle, legal pages stay clean", async () => {
+  const contentRoutes = routes.filter(([path]) => path !== "/sources");
+  for (const [path] of contentRoutes) {
+    const html = await (await render(path)).text();
+    for (const slot of ["ad-placement-top", "ad-placement-mid", "ad-placement-bottom"]) {
+      assert.equal(classCount(html, slot), 1, `${path} ${slot}`);
+    }
+    assert.equal(classCount(html, "ad-placement-global-fallback"), 0, path);
+    assert.equal(classCount(html, "ad-sticky-rail"), 0, path);
+    assert.doesNotMatch(html, /adsterra-popunder|adsterra-social-bar/, path);
+    const headerAt = html.indexOf("site-header");
+    const topAt = html.indexOf("ad-placement-top");
+    const mainAt = html.indexOf('id="main-content"');
+    const midAt = html.indexOf("ad-placement-mid");
+    const bottomAt = html.indexOf("ad-placement-bottom");
+    const footerAt = html.indexOf("site-footer");
+    assert.ok(headerAt !== -1 && headerAt < topAt && topAt < mainAt, `${path} banner follows the header and precedes content`);
+    assert.ok(mainAt < midAt && midAt < bottomAt && bottomAt < footerAt, `${path} native and rectangle follow the article`);
+  }
+
+  const sources = await (await render("/sources")).text();
+  assert.match(sources, /What is confirmed/);
+  assert.equal(classCount(sources, "ad-placement"), 0);
+  assert.equal(classCount(sources, "ad-shell"), 0);
+  assert.equal(classCount(sources, "ad-host"), 0);
+  assert.equal(classCount(sources, "ad-sticky-rail"), 0);
+  assert.doesNotMatch(sources, /adsterra-popunder|adsterra-social-bar/);
 });
 
 test("source repository excludes the starter and keeps required assets", async () => {
